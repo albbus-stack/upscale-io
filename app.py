@@ -8,22 +8,21 @@ import pathlib
 import os
 from werkzeug.utils import secure_filename
 
-MYDIR = os.path.dirname(__file__)
-
 app = Flask(__name__)
 
-IMAGES_FOLDER = '/tmp/'  #For the local version use 'tmp/'
+IMAGES_FOLDER = 'tmp/' # '/tmp/' for Heroku
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = IMAGES_FOLDER
 
 final_filename = ''
 img = None
-patch_size = 100
+patch_size = 100  # Increase this for better quality images
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# Home page with upload
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     global final_filename
@@ -44,14 +43,18 @@ def upload_file():
             return redirect('/processed')
     return render_template('home.html')
 
-# home page where tensorflow acts
+# Processing page where tensorflow acts
 @app.route('/processed', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        return redirect('/')
+        if request.form['submit'] == 'Go back':
+            return redirect('/')
+        elif request.form['submit'] == 'Download':
+            return redirect('/display/' + final_filename)   
     else:
         lr_img = np.array(img) 
         model = 'noise-cancel'
+        # You can try various models :
         # RDN: psnr-large, psnr-small, noise-cancel
         # RRDN: gans
         if(model == 'noise-cancel'):
@@ -69,6 +72,7 @@ def index():
         full_filename = os.path.join(app.config['UPLOAD_FOLDER'], final_filename)
         return render_template('index.html', filename= final_filename)
 
+# Processed image routing
 @app.route('/display/<filename>')
 def display_image(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)

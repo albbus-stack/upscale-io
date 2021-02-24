@@ -26,9 +26,10 @@
             text-align: center;
         }
     </style>
-    <img src="{{ url_for('display_image', filename=filename) }}">
+    <img src="{{ url_for('display_image', filename=filename) }}" ">
     <form method=post>
-        <input type=submit value='Go back'>
+        <input type=submit name='submit' value='Download'>
+        <input type=submit name='submit' value='Go back'>
     </form>
 </body>
 
