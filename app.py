@@ -16,7 +16,7 @@ app.config['UPLOAD_FOLDER'] = IMAGES_FOLDER
 
 final_filename = ''
 img = None
-patch_size = 250
+patch_size = 2
 
 def allowed_file(filename):
     return '.' in filename and \
