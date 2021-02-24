@@ -16,7 +16,7 @@ app.config['UPLOAD_FOLDER'] = IMAGES_FOLDER
 
 final_filename = ''
 img = None
-patch_size = 500
+patch_size = 250
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -40,37 +40,32 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             img = Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect('/processed')
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    return render_template('home.html')
 
 # home page where tensorflow acts
-@app.route('/processed')
+@app.route('/processed', methods=['GET', 'POST'])
 def index():
-    lr_img = np.array(img) 
-    model = 'noise-cancel'
-    # RDN: psnr-large, psnr-small, noise-cancel
-    # RRDN: gans
-    if(model == 'noise-cancel'):
-        rdn = RDN(weights='noise-cancel')
-    elif(model == 'psnr-large'):
-        rdn = RDN(weights='psnr-large')
-    elif(model == 'psnr-small'):
-        rdn = RDN(weights='psnr-small')
-    elif(model == 'gans'):
-        rdn = RRDN(weights='gans')  
+    if request.method == 'POST':
+        return redirect('/')
+    else:
+        lr_img = np.array(img) 
+        model = 'noise-cancel'
+        # RDN: psnr-large, psnr-small, noise-cancel
+        # RRDN: gans
+        if(model == 'noise-cancel'):
+            rdn = RDN(weights='noise-cancel')
+        elif(model == 'psnr-large'):
+            rdn = RDN(weights='psnr-large')
+        elif(model == 'psnr-small'):
+            rdn = RDN(weights='psnr-small')
+        elif(model == 'gans'):
+            rdn = RRDN(weights='gans')  
 
-    sr_img = rdn.predict(lr_img, by_patch_of_size=patch_size)
-    final_im = Image.fromarray(sr_img)
-    final_im.save(os.path.join(app.config['UPLOAD_FOLDER'], final_filename))
-    full_filename = os.path.join(app.config['UPLOAD_FOLDER'], final_filename)
-    return render_template('index.html', image = final_filename)
+        sr_img = rdn.predict(lr_img, by_patch_of_size=patch_size)
+        final_im = Image.fromarray(sr_img)
+        final_im.save(os.path.join(app.config['UPLOAD_FOLDER'], final_filename))
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], final_filename)
+        return render_template('index.html', image = final_filename)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run()
