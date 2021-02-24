@@ -24,6 +24,6 @@ Built using [flask](https://github.com/pallets/flask) and [ISR](https://github.c
 
 4. Run `pip install -r requirements.txt` in your terminal.
 
-5. Run `python app.py` and open `http://127.0.0.1:5000/` on your browser.
+5. Run `python app.py` and open http://127.0.0.1:5000/.
 
 6. Enjoy.  :octocat:
