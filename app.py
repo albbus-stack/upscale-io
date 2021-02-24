@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, url_for, request, redirect
+from flask import Flask, flash, render_template, url_for, request, redirect, send_from_directory
 import numpy as np
 from PIL import Image
 from ISR.models import RDN
@@ -12,13 +12,13 @@ MYDIR = os.path.dirname(__file__)
 
 app = Flask(__name__)
 
-IMAGES_FOLDER = os.path.join('static', 'images')
+IMAGES_FOLDER = '/tmp/'  #For the local version use 'tmp/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = IMAGES_FOLDER
 
 final_filename = ''
 img = None
-patch_size = 2
+patch_size = 100
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -38,9 +38,9 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            img = Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             final_filename = filename
-            file.save(os.path.join('/tmp/', filename))
-            img = Image.open(os.path.join('/tmp/', filename))
             return redirect('/processed')
     return render_template('home.html')
 
@@ -65,9 +65,13 @@ def index():
 
         sr_img = rdn.predict(lr_img, by_patch_of_size=patch_size)
         final_im = Image.fromarray(sr_img)
-        final_im.save('/tmp/', final_filename)
-        full_filename = os.path.join('/tmp/', final_filename)
-        return render_template('index.html', image = final_filename)
+        final_im.save(os.path.join(app.config['UPLOAD_FOLDER'], final_filename))
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], final_filename)
+        return render_template('index.html', filename= final_filename)
+
+@app.route('/display/<filename>')
+def display_image(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == '__main__':
     app.run()
