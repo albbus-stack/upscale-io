@@ -39,8 +39,8 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             final_filename = filename
-            file.save(os.path.join('/tmp', filename))
-            img = Image.open(os.path.join('/tmp', filename))
+            file.save(os.path.join('/tmp/', filename))
+            img = Image.open(os.path.join('/tmp/', filename))
             return redirect('/processed')
     return render_template('home.html')
 
@@ -65,8 +65,8 @@ def index():
 
         sr_img = rdn.predict(lr_img, by_patch_of_size=patch_size)
         final_im = Image.fromarray(sr_img)
-        final_im.save('/tmp', final_filename))
-        full_filename = os.path.join('/tmp', final_filename)
+        final_im.save('/tmp/', final_filename)
+        full_filename = os.path.join('/tmp/', final_filename)
         return render_template('index.html', image = final_filename)
 
 if __name__ == '__main__':
