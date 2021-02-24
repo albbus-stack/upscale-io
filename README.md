@@ -1,5 +1,6 @@
 # upscale-io
 [![GPLv3 License](https://img.shields.io/badge/%20License-GPL%20v3-yellow?style=flat-square&labelColor=black)](https://opensource.org/licenses/)
+[![Flask](https://img.shields.io/static/v1?label=&message=Flask&color=red&style=flat-square&logo=flask&logoColor=black&logoWidth=16&labelColor=&link=)](https://github.com/pallets/flask)
 [![Commited](https://img.shields.io/github/last-commit/albbus-stack/upscale-io?label=Commited&color=42c5f5&style=flat-square&logo=heroku&logoColor=42c5f5&logoWidth=17&labelColor=black)](https://github.com/albbus-stack/upscale-io/commits)
 
 A simple tool to upscale your images, live on https://upscale-io.herokuapp.com/.
