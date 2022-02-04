@@ -3,7 +3,7 @@
 [![Flask](https://img.shields.io/static/v1?label=&message=Flask&color=red&style=flat-square&logo=flask&logoColor=black&logoWidth=16&labelColor=&link=)](https://github.com/pallets/flask)
 [![Commited](https://img.shields.io/github/last-commit/albbus-stack/upscale-io?label=Commited&color=42c5f5&style=flat-square&logo=heroku&logoColor=42c5f5&logoWidth=17&labelColor=black)](https://github.com/albbus-stack/upscale-io/commits)
 
-A simple tool to upscale your images, live on https://upscale-io.herokuapp.com/.
+A simple tool to upscale your images, live at https://upscale-io.herokuapp.com/ (this site doesn't really work due to my hosting limitations, I strongly recommend you build this yourself).
 Built using [flask](https://github.com/pallets/flask) and [ISR](https://github.com/idealo/image-super-resolution).
 
 ## Build it
